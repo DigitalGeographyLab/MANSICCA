@@ -1,0 +1,41 @@
+@import url("//hello.myfonts.net/count/34ae5a");
+
+@font-face {
+    font-family: "Lota Grotesque";
+    font-weight: normal;
+    font-style:  normal;
+    src:         url('fonts/34AE5A_12_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_12_0.woff') format('woff');
+}
+
+@font-face {
+    font-family: "Lota Grotesque";
+    font-weight: bold;  /* actually semibold */
+    font-style:  normal;
+    src:         url('fonts/34AE5A_13_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_13_0.woff') format('woff');
+}
+
+@font-face {
+    font-family: "Lota Grotesque";
+    font-weight: normal;
+    font-style:  italic;
+    src:         url('fonts/34AE5A_9_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_9_0.woff') format('woff');
+}
+
+@font-face {
+    font-family: "Lota Grotesque";
+    font-weight: bold; /* actually semibold */
+    font-style:  italic;
+    src:         url('fonts/34AE5A_14_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_14_0.woff') format('woff');
+}
+
+@font-face {
+    font-family: "Lota Grotesque Alt2";
+    font-weight: 900; /* BLACK */
+    font-style:  italic;
+    src:         url('fonts/34AE5A_22_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_22_0.woff') format('woff');
+}
