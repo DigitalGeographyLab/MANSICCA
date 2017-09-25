@@ -10,16 +10,16 @@
         * sentiments:
         *
         * … [X] [C] [V] [B] [N] [M] … (bottom row of keyboard)
-        *    |   |   -   -   |   |
-        *    |   |           |   +- positive
-        *    |   |           +- positive (ambigous)
+        *    |   |   |   |   |   |
+        *    |   |    \ /    |   +- positive
+        *    |   |     |     +- positive (ambigous)
+        *    |   |     +- neutral
         *    |   +- negative (ambigous)
         *    +- negative
         *
         */
         $(window)
             .keydown(function(e){ 
-                    console.log(e.which);
                 switch(e.which){
                     case 88:
                         /* Xx */
@@ -28,6 +28,11 @@
                     case 67:
                         /* Cc */
                         $("controls button.negativeAmbiguous").click().addClass("active");
+                        break;
+                    case 86:
+                    case 66:
+                        /* Vv Bb */
+                        $("controls button.neutral").click().addClass("active");
                         break;
                     case 78:
                         /* Nn */

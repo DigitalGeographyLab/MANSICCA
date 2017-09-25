@@ -76,12 +76,16 @@ controls button {
 
 controls button.negative, 
 controls button.positive {
-    width: 40%;
+    width: 35%;
+}
+
+controls button.neutral {
+    width: 14%;
 }
 
 controls button.negativeAmbiguous,
 controls button.positiveAmbiguous {
-    width: 10%;
+    width: 8%;
 }
 
 controls button.positive {
@@ -140,6 +144,36 @@ controls button.negative.active {
             #bb1f1f
         );
 }
+
+controls button.neutral {
+    background:
+        linear-gradient(
+            0deg,
+            rgba(0,0,0,0.0),
+            rgba(0,0,0,0.3) 55%,
+            rgba(0,0,0,0.0)
+        ),
+        linear-gradient(
+            #707070,
+            #707070
+        );
+}
+
+controls button.neutral:active,
+controls button.neutral.active
+{
+    background:
+        linear-gradient(
+            0deg,
+            rgba(0,0,0,0.0),
+            rgba(0,0,0,0.3)
+        ),
+        linear-gradient(
+            #707070,
+            #707070
+        );
+}
+
 
 controls button.positiveAmbiguous {
     background:
