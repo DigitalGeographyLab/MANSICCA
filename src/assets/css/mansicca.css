@@ -42,8 +42,8 @@ content {
 
     width: 100%;
     height: calc( 100vH - ( 80px + 20vH ) );
-    min-height: calc( 100vH - ( 80px + 300px ) );
-    max-height: calc( 100vH - ( 80px + 200px ) );
+    min-height: calc( 100vH - ( 80px + 200px ) );
+    /*max-height: calc( 100vH - ( 80px + 200px ) );*/
 }
 
 controls {
@@ -55,8 +55,8 @@ controls {
 
     width: 100vw;
     height: 20vH;
-    min-height: 200px;
-    max-height: 300px;
+    /*min-height: 200px;*/
+    max-height: 200px;
 
     z-index: 255;
 
