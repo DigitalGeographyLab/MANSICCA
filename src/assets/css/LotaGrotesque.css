@@ -35,6 +35,14 @@
 @font-face {
     font-family: "Lota Grotesque Alt2";
     font-weight: 900; /* BLACK */
+    font-style:  normal;
+    src:         url('fonts/34AE5A_21_0.woff2') format('woff2'),
+                 url('fonts/34AE5A_21_0.woff') format('woff');
+}
+
+@font-face {
+    font-family: "Lota Grotesque Alt2";
+    font-weight: 900; /* BLACK */
     font-style:  italic;
     src:         url('fonts/34AE5A_22_0.woff2') format('woff2'),
                  url('fonts/34AE5A_22_0.woff') format('woff');

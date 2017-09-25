@@ -73,22 +73,23 @@ if $uploadToTestServer; then
         --exclude '***/.DS_Store' \
         --exclude '***.swp' \
         build/ \
-        christoph@chri.stoph.at:/var/www/porem.peippo.at/htdocs-secure/
+        christoph@chri.stoph.at:/var/www/mansicca.christophfink.com/htdocs-secure/
 fi;
 
 
 # -- 5) upload to production server
 if $uploadToProductionServer; then
-    read -r -p "upload to PRODUCTION? [y/N] " response
-    response=${response,,}    # tolower
-    if [[ "$response" =~ ^(yes|y)$ ]]; then
-        rsync -avzH --progress --delete --partial \
-            --exclude '***/.keep' \
-            --exclude '***/.DS_Store' \
-            --exclude '***.swp' \
-            build/ \
-            porem@upload.univie.ac.at:/u/www/porem/maps/
-    fi
+    echo "no production server defined"
+#    read -r -p "upload to PRODUCTION? [y/N] " response
+#    response=${response,,}    # tolower
+#    if [[ "$response" =~ ^(yes|y)$ ]]; then
+#        rsync -avzH --progress --delete --partial \
+#            --exclude '***/.keep' \
+#            --exclude '***/.DS_Store' \
+#            --exclude '***.swp' \
+#            build/ \
+#            porem@upload.univie.ac.at:/u/www/porem/maps/
+#    fi
 fi
 
 
