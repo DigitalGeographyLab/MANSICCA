@@ -42,6 +42,8 @@
                         /* Mm */
                         $("controls button.positive").click().addClass("active");
                         break;
+                    default:
+                        break;
                 }
             })
             .keyup(function(e){
@@ -50,5 +52,3 @@
 
     });
 }(jQuery));
-
-
