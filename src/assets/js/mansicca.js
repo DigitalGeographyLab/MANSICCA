@@ -50,5 +50,36 @@
                $("controls button").removeClass("active");
             });
 
+
+        /* Create an M object as soon as a username
+         * is entered.
+         */
+        $("username input").on("keypress", function(e){
+            if(e.keyCode == 13){
+                var username = $(this).val();
+                if(username && this.validity.valid){
+                    $(this).prop("readonly", "readonly");
+                    $("username").addClass("inactive");
+            
+                    window.m = new M(
+                        $("content").get(0),
+                        mansiccaKey,
+                        username
+                    );
+
+                    localStorage.setItem("mansicca-username", username);
+                }
+            }
+        });
+
+        /* Check if we have a saved username, 
+         * prefill the username input
+         */
+        var username = localStorage.getItem("mansicca-username");
+        if(username){
+            $("username input").val(username);
+        }
+
+
     });
 }(jQuery));

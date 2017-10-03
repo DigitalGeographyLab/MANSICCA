@@ -49,20 +49,28 @@ username.inactive {
     /*opacity: 0;*/
     z-index: 0;
     
-    height: 50px;
-    width: 300px;
+    height: 20px;
+    width: auto;
     max-width: 80vW;
 
     position: static;
     float: right;
+
+    margin-right: 25px;
 }
 
+/*username.inactive::before {
+    content: "logged in as: ";
+    font: normal 12px/20px "Source Sans Pro";
+}*/
+
 username.inactive input {
-    font: normal italic 13px/120% "Source Sans Pro";
+    font: italic 15px/20px "Source Sans Pro";
     text-align: right;
     color: #707070;
 
-    width: 100px;
+    width: auto;
+    min-width: 0;
     height: 20px;
 
     margin: 0 10px 0 0;

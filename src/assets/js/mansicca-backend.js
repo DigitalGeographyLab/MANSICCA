@@ -4,9 +4,19 @@
 (function ($) {
     "use strict";
 
-    var M = function(container, user){
+    var path = window.location.href;
+    path = path.substr(0, path.lastIndexOf("/") + 1);
+    path += $("script").last().attr("src");
+    path = path.substr(0, path.lastIndexOf("/") + 1);
+
+    var dbPath = path + "../db/mansicca.py";
+
+    var M = function(container, key, username){
         this.container = container || false;
-        this.user = user || "";
+        this.key = key || false;
+        this.username = username || "";
+
+        this.getNext();
     };
     
     M.Item = function(caption, photo) {
@@ -15,20 +25,33 @@
         this._preloadPhoto();
     }
     
-    M.Item._preloadPhoto = function() {
+    M.Item.prototype._preloadPhoto = function() {
         if(this.photo){
             var photo = new Image();
             photo.src = this.photo;
         }
     }
     
-    M.items = {
+    M.prototype.items = {
         previous: new M.Item(),
         current:  new M.Item(),
         next:     new M.Item()
     }
     
     M.prototype.getNext = function(){
+        $.getJSON(
+            dbPath, 
+            {
+                key: this.key,
+                username: this.username,
+                action: "get"
+            }, 
+            function(data){
+                console.log(data);
+            }
+        );
+
+
         // returns already cached next item, 
         // loads another one into cache
     };
