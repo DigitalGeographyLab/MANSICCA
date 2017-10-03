@@ -47,7 +47,7 @@ cd build
 # -- 2) minify javascript
 if $minify; then
     find . -iname "*.js" -and -not -iname "*.min.js" | while read jsFile;do
-        uglifyjs -c -m --stats "${jsFile}" -o "${jsFile/%.js/.min.js}" &&
+        uglifyjs -c -m -o "${jsFile/%.js/.min.js}" "${jsFile}" &&
             find . \( -iname "*.html" -or -iname "*.php" \) -exec sed -i "s/$(basename ${jsFile})/$(basename ${jsFile/%.js/.min.js})/g" {} \; &&
                 rm -v "${jsFile}"
     done
