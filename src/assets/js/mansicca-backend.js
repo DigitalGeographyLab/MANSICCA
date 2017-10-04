@@ -1,5 +1,5 @@
 /* global jQuery */
-/* eslint-disable no-unused-vars, object-shorthand, no-implicit-globals */
+/* eslint-disable no-unused-vars, object-shorthand, no-implicit-globals, no-console */
 
 (function ($) {
     "use strict";
@@ -39,6 +39,8 @@
     }
     
     M.prototype.getNext = function(){
+        var nextItem = this.items.next;
+
         $.getJSON(
             dbPath, 
             {
@@ -47,25 +49,57 @@
                 action: "get"
             }, 
             function(data){
+                if(data.status == "fetched-item") {
+                    this.items.previous = this.items.current;
+                    this.items.current = this.items.next;
+                    this.items.next = data.item;
+                } else {
+                    console.log(data);
+                }
+            }
+        );
+        
+        return nextItem;
+    };
+
+    M.prototype.saveAndGetNext = function(sentiment, ambiguous){
+        sentiment = sentiment || false;
+        ambiguous = ambiguous || false;
+        if(!sentiment) {
+            console.log("no sentiment specified, item not saved");
+            return false;
+        }
+
+        $.extend(
+            this.items.current,
+            {
+                sentiment: sentiment,
+                ambiguous: ambiguous
+            }
+        );
+        
+        $.getJSON(
+            dbPath, 
+            {
+                key: this.key,
+                username: this.username,
+                action: "save",
+                sentiment: this.items.previous.sentiment,
+                ambiguous: this.items.previous.ambiguous,
+                token: this.items.previous.token
+            },
+            function(data){
                 console.log(data);
             }
         );
 
-
-        // returns already cached next item, 
-        // loads another one into cache
-    };
-    
-    M.prototype.saveAndGetNext = function(){
-        // saves previous (!) item, 
-        // moves current item to previous position in stack
-        // then calls getNext()
+        return this.getNext();
     };
     
     M.prototype.getPrevious = function(){
-        // discards cached next item, 
-        // puts current item into next-item position in stack,
-        // loads previous
+        this.items.next = this.items.current;
+        this.items.current = this.items.previous;
+        return this.items.current;
     };
     
     window.M = M;

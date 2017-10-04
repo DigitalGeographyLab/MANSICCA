@@ -1,4 +1,4 @@
-/* global jQuery */
+/* global jQuery, M, mansiccaKey */
 /* eslint-disable no-unused-vars, object-shorthand */
 
 (function ($) {

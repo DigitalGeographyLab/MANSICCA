@@ -7,9 +7,11 @@ MansiccaBackend: fetches records from a PostgreSQL database
 
 
 import cgi
+import datetime
 import json
 import psycopg2
 import psycopg2.extras
+import secrets
 import string
 
 
@@ -51,6 +53,12 @@ class MansiccaBackend:
             cursor_factory=psycopg2.extras.DictCursor
         )
 
+    def _generateToken(self):
+        return "{date:%Y%m%d}_{token}".format(
+                date=datetime.datetime.now(),
+                token=secrets.token_hex()
+        )
+
     def _sanitise(self, text):
         validchars = frozenset("%s%s" % (string.ascii_letters, string.digits))
         return str("".join(c for c in text if c in validchars)[:128])
@@ -64,34 +72,79 @@ class MansiccaBackend:
         Returns:
             (object)
         """
-        self.cursor.execute(
-            """SELECT
+        self.cursor.execute("""
+            SELECT
                 id,
                 caption,
                 url,
                 photo
             FROM
                 """ + self.tableName + """
+            WHERE
+                photo <> ''
             ORDER BY
                 array_length(sentiment,1) ASC,
                 (select sum(s) from unnest(ambiguous::int[]) s) ASC,
                 ('{""" + self.username + """}' <@ annotater) ASC
-            LIMIT 1;"""
-        )
+            LIMIT 1;
+        """)
 
         row = self.cursor.fetchone()
-        # implement the case that data is exhausted!
+        if not row:
+            row = {
+                "id": False,
+                "caption": "",
+                "photo": "",
+                "url": ""
+            }
+        else:
+            row = {
+                "id": row["id"],
+                "caption": row["caption"],
+                "photo": row["photo"],
+                "url": row["url"],
+                "token": self._generateToken()
+            }
 
-        return {
-            "id": row["id"],
-            "caption": row["caption"],
-            "photo": row["photo"]
-        }
+            self.cursor.execute(
+                """
+                    UPDATE
+                        """ + self.tableName + """
+                    SET
+                        token = array_append(token, %s)
+                    WHERE
+                        id=%s;
+                """,
+                (
+                    row["token"],
+                    row["id"]
+                )
+            )
+
+        return row
 
     def saveItem(self, sentiment, ambiguous, token):
-        # return fetchItem! -> no, don’t – that additional transfer does
-        # not hurt us and enables us to have a nicer frontend
-        pass
+        # does this need additional security checks?
+        self.cursor.execute(
+            """
+                UPDATE
+                    """ + self.tableName + """
+                SET
+                    sentiment = array_append(sentiment, %s),
+                    ambiguous = array_append(ambiguous, %s),
+                    annotater = array_append(annotater, %s),
+                    token = array_remove(token, %s)
+                WHERE
+                    %s <@ token;
+            """,
+            (
+                sentiment,
+                ambiguous,
+                self.username,
+                token,
+                token
+            )
+        )
 
 
 def main():
