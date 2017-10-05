@@ -80,6 +80,16 @@
             $("username input").val(username);
         }
 
+        /* Click on hidden username -> change it
+         */
+        $("body").on("click", "username.inactive input", function() {
+            $(this)
+                .prop("readonly", false)
+                .focus()
+                .parent()
+                    .removeClass("inactive");
+        });
+
 
     });
 }(jQuery));

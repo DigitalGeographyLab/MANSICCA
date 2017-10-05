@@ -16,7 +16,7 @@
         this.key = key || false;
         this.username = username || "";
 
-        this.getNext();
+        this._getFirst();
     };
     
     M.Item = function(caption, photo) {
@@ -38,6 +38,24 @@
         next:     new M.Item()
     }
     
+    M.prototype._getFirst = function(){
+        for(var item in this.items){
+            $.getJSON(
+                dbPath, 
+                {
+                    key: this.key,
+                    username: this.username,
+                    action: "get"
+                },
+                function(item, data){
+                    if(data.status == "fetched-item"){
+                        this.items[item] = data.item;
+                    }
+                }.bind(this, (' ' + item).slice(1))
+            );
+        }
+    };
+
     M.prototype.getNext = function(){
         var nextItem = this.items.next;
 
@@ -56,7 +74,7 @@
                 } else {
                     console.log(data);
                 }
-            }
+            }.bind(this)
         );
         
         return nextItem;

@@ -39,10 +39,7 @@ username {
     width: 100vW;
     height: 100vH;
     
-    background: #fbfbf7;
-    opacity: 0.8;
-
-    transition: opacity 0.7s, z-index 0.01s 0.7s;
+    background: rgba(251, 251, 247, 0.9); /*#fbfbf7;*/
 }
 
 username.inactive {

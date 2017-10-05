@@ -1,0 +1,51 @@
+content.instagram {
+    display: block;
+
+    height: calc( 100vH - ( 80px + 200px + 5vH) );
+    width: calc( ( 100vH - ( 80px + 200px + 5vH) ) * ( 100 / 155 ) );
+    min-height: initial;
+
+    margin-left: calc( 50vW - ( ( ( 100vH - ( 80px + 200px + 5vH) ) * ( 100 / 155 ) ) / 2) );
+
+    background: #fff;
+    border: 1px solid #0a0a0a;
+
+    color: #0a0a0a;
+    font: 14px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+
+    position: relative;
+}
+
+content.instagram div.user {
+    width: calc( 100% - 50px );
+    height: 50px;
+
+    margin-left: 50px;
+    padding: 8px;
+
+    line-height: 16px;
+
+    position: relative;
+}
+
+content.instagram div.user::before {
+    content: " ";
+
+    display: block;
+    position: absolute;
+    left: -35px;
+    top: 10px;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 15px;
+
+    background: #808080;
+}
+
+content.instagram img {
+    width: 100%;
+    height: calc( 100% * (100 / 155) );
+    background: #ffa;
+}
