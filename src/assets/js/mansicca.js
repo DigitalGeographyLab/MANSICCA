@@ -1,4 +1,4 @@
-/* global jQuery, M, mansiccaKey */
+/* global jQuery, M, m, mansiccaKey */
 /* eslint-disable no-unused-vars, object-shorthand */
 
 (function ($) {
@@ -47,8 +47,51 @@
                 }
             })
             .keyup(function(e){
-               $("controls button").removeClass("active");
+                $("controls button").removeClass("active");
             });
+
+        /* Catch the actual button events
+         */
+        $("controls button").click(function(){
+            if(window.m){
+                var sentiment = false;
+                var ambiguous = false;
+    
+                var classes = $(this).attr("class");
+
+                if((classes.indexOf("back") > -1)){
+                    if(!(classes.indexOf("disabled") > -1)){
+                        if(m.items.previous.photo){
+                            m.getPrevious();
+                        }
+                        $(this).addClass("disabled");
+                    }
+                } else {
+    
+                    if(classes.indexOf("positive") > -1){
+                        sentiment = "positive";
+                    } else if(classes.indexOf("neutral") > -1){
+                        sentiment = "neutral";
+                    } else if(classes.indexOf("negative") > -1){
+                        sentiment = "negative";
+                    } else if(classes.indexOf("skipped") > -1){
+                        sentiment = "skipped";
+                    }
+        
+                    if(classes.indexOf("Ambiguous") > -1){
+                        ambiguous = true;
+                    }
+        
+                    if(sentiment){
+                        m.saveAndGetNext(
+                            sentiment, 
+                            ambiguous
+                        );
+                        $("controls button.back.disabled").removeClass("disabled");
+                    }
+                }
+            }
+        });
 
 
         /* Create an M object as soon as a username
@@ -90,6 +133,14 @@
                     .removeClass("inactive");
         });
 
+        /* save the last annotation when the 
+         * user leaves the page 
+         */
+        $(window).bind('beforeunload', function(){
+            if(window.m){
+                m.saveAndGetNext(true);
+            }
+        });
 
     });
 }(jQuery));

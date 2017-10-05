@@ -49,6 +49,7 @@ class MansiccaBackend:
         self.connection = psycopg2.connect(
             self.connectionString
         )
+        self.connection.set_session(autocommit=True)
         self.cursor = self.connection.cursor(
             cursor_factory=psycopg2.extras.DictCursor
         )
@@ -56,7 +57,7 @@ class MansiccaBackend:
     def _generateToken(self):
         return "{date:%Y%m%d}_{token}".format(
                 date=datetime.datetime.now(),
-                token=secrets.token_hex()
+                token=secrets.token_hex(8)
         )
 
     def _sanitise(self, text):
@@ -72,6 +73,7 @@ class MansiccaBackend:
         Returns:
             (object)
         """
+        today = "{:%Y%m%d}".format(datetime.datetime.now())
         self.cursor.execute("""
             SELECT
                 id,
@@ -82,8 +84,21 @@ class MansiccaBackend:
                 """ + self.tableName + """
             WHERE
                 photo <> ''
+            AND
+                NOT EXISTS (
+                    SELECT
+                        1
+                    FROM
+                        (SELECT unnest(token) as token ) t
+                    WHERE
+                        t.token like '""" + today + """_%'
+                )
             ORDER BY
-                array_length(sentiment,1) ASC,
+                CASE
+                    WHEN array_length(sentiment,1) IS NULL
+                    THEN 0
+                    ELSE array_length(sentiment,1)
+                END ASC,
                 (select sum(s) from unnest(ambiguous::int[]) s) ASC,
                 ('{""" + self.username + """}' <@ annotater) ASC
             LIMIT 1;
@@ -142,9 +157,56 @@ class MansiccaBackend:
                 ambiguous,
                 self.username,
                 token,
-                token
+                [token]
             )
         )
+
+        rowcount = str(self.cursor.rowcount)
+
+        # use the opportunity to clean up a bit:
+        # (delete all (unused) tokens from yesterday or earlier)
+        today = "{:%Y%m%d}".format(datetime.datetime.now())
+        self.cursor.execute(
+            """
+                SELECT
+                    token
+                FROM
+                    (
+                        SELECT
+                            unnest(token) as token
+                        FROM
+                            instagram_southafrica_5000
+                    ) t
+                WHERE
+                    substring(t.token for 8)::int < %s;
+            """,
+            (int(today),)
+        )
+
+        try:
+            expiredTokens = \
+                    [row["token"] for row in self.cursor.fetchall()]
+            for token in expiredTokens:
+                self.cursor.execute(
+                    """
+                        UPDATE
+                            instagram_southafrica_5000
+                        SET
+                            token = array_remove(token, %s)
+                        WHERE
+                            %s <@ token;
+                    """,
+                    (
+                        token,
+                        [token]
+                    )
+                )
+        except Exception as e:
+            pass
+
+        return f'Successfully saved sentiment "{sentiment:s}" \
+                ({"" if ambiguous else "not ":s}ambiguous) \
+                for post [{token}] __{rowcount}'
 
 
 def main():
@@ -183,12 +245,53 @@ def main():
             )
 
         elif action == "save":
-            returnValue.update(
-                {
-                    "status": "saved-item",
-                    "details": m.saveItem()
-                }
-            )
+            try:
+                sentiment = args["sentiment"].value
+                ambiguous = args["ambiguous"].value
+                token = args["token"].value
+
+                assert sentiment in [
+                    "positive",
+                    "neutral",
+                    "negative",
+                    "skipped"
+                ]
+                assert ambiguous in ["true", "false"]
+                ambiguous = ambiguous == "true"
+
+                returnValue.update(
+                    {
+                        "status": "saved-item",
+                        "details": m.saveItem(
+                            sentiment,
+                            ambiguous,
+                            token
+                        )
+                    }
+                )
+            except AssertionError:
+                returnValue.update(
+                    {
+                        "status": "failed-to-save-item",
+                        "details": "values for variables sentiment and/or" +
+                        "ambiguous out of range"
+                    }
+                )
+            except KeyError:
+                returnValue.update(
+                    {
+                        "status": "failed-to-save-item",
+                        "details": "values for variables sentiment and/or" +
+                        "ambiguous missing"
+                    }
+                )
+            except psycopg2.Error:
+                returnValue.update(
+                    {
+                        "status": "failed-to-save-item",
+                        "details": "database error"
+                    }
+                )
     else:
         returnValue.update(
             {

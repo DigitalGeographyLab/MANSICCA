@@ -343,6 +343,47 @@ controls button svg {
     display: none;
 }
 
+controls div.extra-buttons {
+    position: absolute;
+    bottom: calc(20vH + 20px);
+    right: 20px;
+}
+
+controls div.extra-buttons button {
+    display: block;
+    float: none;
+
+    padding: 8px;
+
+    border: none;
+    background: none;
+
+    color: #000;
+    font: 18px/120% "Lota Grotesque";
+    text-transform: uppercase;
+
+    cursor: pointer;
+
+    transition: opacity 0.7s;
+}
+
+controls div.extra-buttons button.disabled {
+    cursor: not-allowed; /*default;*/
+    opacity: 0.4;
+}
+
+controls div.extra-buttons button::after {
+    font: 16px FontAwesome;
+}
+
+controls div.extra-buttons button.skipped::after {
+    content: " \f050 "; /* fast-forward */
+}
+
+controls div.extra-buttons button.back::after {
+    content: " \f0e2 "; /* undo */
+}
+
 
 @media only screen and (min-width: 801px) {
     controls button svg {

@@ -16,13 +16,33 @@
         this.key = key || false;
         this.username = username || "";
 
+        if(this.container){
+            this.container = $(this.container);
+        }
+
         this._getFirst();
     };
     
-    M.Item = function(caption, photo) {
-        this.caption = caption || "";
-        this.photo = photo || false;
-        this._preloadPhoto();
+    M.Item = function(options) {
+        this._options = $.extend(
+            {
+                caption: "",
+                photo: false,
+                token: "",
+                url: ""
+            },
+            options
+        );
+
+        this.caption = this._options.caption;
+        this.photo = this._options.photo;
+        this.token = this._options.token;
+        this.url = this._options.url;
+
+        if(this.photo){
+            this.photo = path + "../data/" + this.photo[0] + "/" + this.photo;
+        }
+        this._preloadPhoto(this.photo);
     }
     
     M.Item.prototype._preloadPhoto = function() {
@@ -39,26 +59,36 @@
     }
     
     M.prototype._getFirst = function(){
-        for(var item in this.items){
-            $.getJSON(
-                dbPath, 
-                {
-                    key: this.key,
-                    username: this.username,
-                    action: "get"
-                },
-                function(item, data){
-                    if(data.status == "fetched-item"){
-                        this.items[item] = data.item;
-                    }
-                }.bind(this, (' ' + item).slice(1))
-            );
-        }
+        $.getJSON(
+            dbPath, 
+            {
+                key: this.key,
+                username: this.username,
+                action: "get"
+            },
+            function(data){
+                if(data.status == "fetched-item"){
+                    this.items.next = new M.Item(data.item);
+                    this.getNext.bind(this)();
+                }
+            }.bind(this)
+        );
     };
 
-    M.prototype.getNext = function(){
-        var nextItem = this.items.next;
+    M.prototype._updateContainer = function(item) {
+        item = item || this.items.current;
+        this.container
+            .find("img")
+                .attr(
+                    "src", 
+                    item.photo
+                )
+                .end()
+            .find("div.caption")
+                .text(item.caption);
+    }
 
+    M.prototype.getNext = function(){
         $.getJSON(
             dbPath, 
             {
@@ -70,54 +100,49 @@
                 if(data.status == "fetched-item") {
                     this.items.previous = this.items.current;
                     this.items.current = this.items.next;
-                    this.items.next = data.item;
+                    this.items.next = new M.Item(data.item);
+
+                    this._updateContainer.bind(this)(); 
                 } else {
                     console.log(data);
                 }
             }.bind(this)
         );
-        
-        return nextItem;
     };
 
     M.prototype.saveAndGetNext = function(sentiment, ambiguous){
         sentiment = sentiment || false;
         ambiguous = ambiguous || false;
-        if(!sentiment) {
-            console.log("no sentiment specified, item not saved");
-            return false;
+        if(sentiment) {
+            $.extend(
+                this.items.current,
+                {
+                    sentiment: sentiment,
+                    ambiguous: ambiguous
+                }
+            );
+            
+            $.getJSON(
+                dbPath, 
+                {
+                    key: this.key,
+                    username: this.username,
+                    action: "save",
+                    sentiment: this.items.previous.sentiment,
+                    ambiguous: this.items.previous.ambiguous,
+                    token: this.items.previous.token
+                },
+                function(data){
+                    this.getNext();
+                }.bind(this)
+            );
         }
-
-        $.extend(
-            this.items.current,
-            {
-                sentiment: sentiment,
-                ambiguous: ambiguous
-            }
-        );
-        
-        $.getJSON(
-            dbPath, 
-            {
-                key: this.key,
-                username: this.username,
-                action: "save",
-                sentiment: this.items.previous.sentiment,
-                ambiguous: this.items.previous.ambiguous,
-                token: this.items.previous.token
-            },
-            function(data){
-                console.log(data);
-            }
-        );
-
-        return this.getNext();
     };
     
     M.prototype.getPrevious = function(){
-        this.items.next = this.items.current;
-        this.items.current = this.items.previous;
-        return this.items.current;
+        this.items.next = new M.Item(this.items.current._options);
+        this.items.current = new M.Item(this.items.previous._options);
+        this._updateContainer();
     };
     
     window.M = M;
