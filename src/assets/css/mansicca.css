@@ -302,8 +302,10 @@ controls button.negativeAmbiguous {
             -45deg,
             #bb1f1f,
             #bb1f1f 15px,
-            #53a65b 15px,
-            #53a65b 20px
+            /*#53a65b 15px,
+            #53a65b 20px*/
+            #707070 15px,
+            #707070 20px
         );
 }
 
@@ -319,8 +321,10 @@ controls button.negativeAmbiguous.active {
             -45deg,
             #bb1f1f,
             #bb1f1f 15px,
-            #53a65b 15px,
-            #53a65b 20px
+            /*#53a65b 15px,
+            #53a65b 20px*/
+            #707070 15px,
+            #707070 20px
         );
 }
 
