@@ -264,8 +264,10 @@ controls button.positiveAmbiguous {
             -45deg,
             #53a65b,
             #53a65b 15px,
-            #bb1f1f 15px,
-            #bb1f1f 20px
+            /*#bb1f1f 15px,
+            #bb1f1f 20px*/
+            #707070 15px,
+            #707070 20px
         );
 }
 
@@ -281,8 +283,10 @@ controls button.positiveAmbiguous.active {
             -45deg,
             #53a65b,
             #53a65b 15px,
-            #bb1f1f 15px,
-            #bb1f1f 20px
+            /*#bb1f1f 15px,
+            #bb1f1f 20px*/
+            #707070 15px,
+            #707070 20px
         );
 }
 
