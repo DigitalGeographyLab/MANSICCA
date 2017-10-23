@@ -17,6 +17,10 @@ import string
 
 __all__ = ["MansiccaBackend"]
 
+
+# config is a dict of dicts, its key is the “API-KEY” configured in the client javascript
+# its values are dicts in the form of `{ "connectionString": "", "tableName": }` (also see default example)
+
 config = {
     "YKWsd6QW5sxSNInbwiMmmDhugwS6PpVJ": {
         "connectionString": "dbname=mansicca user=mansicca",
