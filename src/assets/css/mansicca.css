@@ -5,7 +5,7 @@
 html, body {
     margin:0;
     padding:0;
-    font: normal normal 15px/120% "Lota Grotesque";
+    font: normal normal 15px/120% "Montserrat";
     color: #6e6e6e;
     background: #fbfbf7; /* fdfdfd;*/
 }
@@ -13,7 +13,7 @@ html, body {
 username input {
     display: block;
 
-    font: bold 32px/40px "Lota Grotesque";
+    font: bold 32px/40px "Montserrat";
     text-align: center;
     
     border: 1px solid #6e6e6e;
@@ -97,7 +97,7 @@ header * {
 }
 
 header h1 {
-   font-family: "Lota Grotesque Alt2";
+   font-family: "Montserrat";
    font-weight: 900;
    margin: 0.5em;
 }
@@ -140,7 +140,7 @@ controls {
     background: #aad;
     box-shadow: -2px 0px 4px 0px rgba(0,0,0,0.4);
 
-    font: normal 24px/120% "Lota Grotesque";
+    font: normal 24px/120% "Montserrat";
 }
 
 controls button {
@@ -341,7 +341,7 @@ controls button em {
 }
 
 controls button svg {
-    font-family: "Lota Grotesque Alt2";
+    font-family: "Montserrat";
     font-weight: 900;
     font-style: italic;
 
@@ -367,7 +367,7 @@ controls div.extra-buttons button {
     background: none;
 
     color: #000;
-    font: 18px/120% "Lota Grotesque";
+    font: 18px/120% "Montserrat";
     text-transform: uppercase;
 
     cursor: pointer;
