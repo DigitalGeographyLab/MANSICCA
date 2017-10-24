@@ -5,7 +5,7 @@ pgconn="${2}"
 table="${3}"
 
 
-wd="$(realpath $(dirname "${0}"))"
+wd="$(realpath "$(dirname "${0}")")"
 
 display_url="$(wget "${url}" -qO - |grep display_url|sed 's/.*"display_url": "\([^"]*\)",.*/\1/')"
 

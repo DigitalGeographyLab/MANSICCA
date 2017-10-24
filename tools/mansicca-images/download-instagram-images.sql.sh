@@ -1,10 +1,10 @@
 #!/bin/bash
 
-table="instagram_southafrica"
-pgconn="dbname=mansicca"
+table="instagram_sa_visitorhistory"
+pgconn="dbname=chrisfin"
 
 
-wd="$(realpath $(dirname "${0}"))"
+wd="$(realpath "$(dirname "${0}")")"
 mkdir -p "${wd}/images/"
 
 (
