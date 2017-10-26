@@ -25,6 +25,10 @@ config = {
     "YKWsd6QW5sxSNInbwiMmmDhugwS6PpVJ": {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "instagram_southafrica_5000"
+    },
+    "9ju2G5FL30tiDd1ERqU35Du6uu9GKF7S": {
+        "connectionString": "dbname=mansicca user=mansicca",
+        "tableName":        "instagram_sa_visitorhistory_1000"
     }
 }
 
