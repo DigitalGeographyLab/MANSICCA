@@ -9,6 +9,6 @@ mkdir -p "${wd}/images/"
 
 (
 psql -t "$pgconn" << EOSQL
-    select url from ${table} where photo='';
+    select url from ${table} where caption='-1' or photo='';
 EOSQL
 ) | xargs -P 10 -I {} "${wd}/download-one-instagram-image.sh" "{}" "${pgconn}" "${table}"
