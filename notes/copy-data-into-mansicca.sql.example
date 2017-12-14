@@ -41,11 +41,12 @@ ALTER TABLE instagram_southafrica ADD COLUMN pkey SERIAL PRIMARY KEY;
 CREATE INDEX ON instagram_southafrica using btree(pkey);
 CREATE INDEX ON instagram_southafrica using btree(id);
     
--- add columns for -sentiment, -ambiguity, -person, lock-token
+-- add columns for -sentiment, -ambiguity, -person, lock-token, language
 ALTER TABLE instagram_southafrica ADD COLUMN sentiment sentiment[];
 ALTER TABLE instagram_southafrica ADD COLUMN ambiguous boolean[];
 ALTER TABLE instagram_southafrica ADD COLUMN annotater text[];
 ALTER TABLE instagram_southafrica ADD COLUMN token text[];
+ALTER TABLE instagram_southafrica ADD COLUMN language VARCHAR(2);
 
 -- select a random 5000 row sample
 CREATE TABLE instagram_southafrica_5000 AS 
