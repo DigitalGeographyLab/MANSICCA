@@ -6,7 +6,15 @@ Add a column to the database table and
 fill in the best guess language code
 (using langid, it’s not always correct,
 but at least easy to implement)
+
+Took  ~10s + 20s queue timeout for the
+5000 row instagram_southafrica sample
+(on my desktop i5/16GiB RAM)
+
+Don’t forget to adjust the connection
+string and table name in main()
 """
+
 
 import multiprocessing
 import psycopg2
