@@ -74,7 +74,7 @@ if $uploadToTestServer; then
         --exclude '***.swp' \
         --exclude 'assets/data/***' \
         build/ \
-        christoph@chri.stoph.at:/var/www/mansicca.christophfink.com/htdocs-secure/
+        christoph@chri.stoph.at:/var/www/musticca.christophfink.com/htdocs-secure/
 fi;
 
 
