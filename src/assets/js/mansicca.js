@@ -106,7 +106,7 @@
             
                     window.m = new M(
                         $("content").get(0),
-                        mansiccaKey,
+                        false,
                         username
                     );
 

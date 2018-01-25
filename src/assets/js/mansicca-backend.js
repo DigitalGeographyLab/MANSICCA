@@ -14,10 +14,16 @@
     var M = function(container, key, username){
         this.container = container || false;
         this.key = key || false;
-        this.username = username || "";
+        this.username = username || "anonymous";
 
         if(this.container){
             this.container = $(this.container);
+        }
+
+        if(!this.key){
+            if(window.location.hash.length > 1){
+                this.key = window.location.hash.substring(1);
+            }
         }
 
         this._getFirst();
@@ -39,7 +45,7 @@
         this.token = this._options.token;
         this.url = this._options.url;
 
-        if(this.photo){
+        if(this.photo && this.photo.substring(0,4) != "http"){
             this.photo = path + "../data/" + this.photo[0] + "/" + this.photo;
         }
         this._preloadPhoto(this.photo);
