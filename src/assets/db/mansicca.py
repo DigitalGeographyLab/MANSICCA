@@ -5,7 +5,6 @@
 MansiccaBackend: fetches records from a PostgreSQL database
 """
 
-
 import cgi
 import datetime
 import json
@@ -29,6 +28,10 @@ config = {
     "9ju2G5FL30tiDd1ERqU35Du6uu9GKF7S": {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "instagram_sa_visitorhistory_1000"
+    },
+    "PallasYllas": {
+        "connectionString": "dbname=mansicca user=mansicca",
+        "tableName":        "py-instagram"
     }
 }
 
@@ -89,7 +92,7 @@ class MansiccaBackend:
                 url,
                 photo
             FROM
-                """ + self.tableName + """
+                """ + '"' + self.tableName + '"' + """
             WHERE
                 photo <> ''
             AND
@@ -132,7 +135,7 @@ class MansiccaBackend:
             self.cursor.execute(
                 """
                     UPDATE
-                        """ + self.tableName + """
+                        """ + '"' + self.tableName + '"' + """
                     SET
                         token = array_append(token, %s)
                     WHERE
@@ -151,7 +154,7 @@ class MansiccaBackend:
         self.cursor.execute(
             """
                 UPDATE
-                    """ + self.tableName + """
+                    """ + '"' + self.tableName + '"' + """
                 SET
                     sentiment = array_append(sentiment, %s),
                     ambiguous = array_append(ambiguous, %s),
