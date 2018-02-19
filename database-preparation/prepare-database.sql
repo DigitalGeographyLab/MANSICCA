@@ -1,3 +1,6 @@
+-- create postgis extension
+CREATE EXTENSION IF NOT EXISTS postgis;
+
 -- create type for sentiment, plus index functions for arrays of sentiment
 -- cf. http://adpgtech.blogspot.fi/2016/03/gin-indexing-array-of-enums.html
 CREATE TYPE sentiment AS ENUM('positive', 'neutral', 'negative');

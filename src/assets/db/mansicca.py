@@ -10,6 +10,7 @@ import datetime
 import json
 import psycopg2
 import psycopg2.extras
+import psycopg2.sql
 import secrets
 import string
 
@@ -17,8 +18,12 @@ import string
 __all__ = ["MansiccaBackend"]
 
 
-# config is a dict of dicts, its key is the “API-KEY” configured in the client javascript
-# its values are dicts in the form of `{ "connectionString": "", "tableName": }` (also see default example)
+# config is a dict of dicts, its key is the “API-KEY” configured
+# in the client javascript
+#
+# its values are dicts in the form of
+# `{ "connectionString": "", "tableName": }`
+# (also see default example)
 
 config = {
     "YKWsd6QW5sxSNInbwiMmmDhugwS6PpVJ": {
@@ -32,6 +37,10 @@ config = {
     "PallasYllas": {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "py-instagram"
+    },
+    "Rhino1": {
+        "connectionString": "dbname=mansicca user=mansicca",
+        "tableName":        "rhino1"
     }
 }
 
@@ -51,6 +60,7 @@ class MansiccaBackend:
         """
         self.connectionString = connectionString
         self.tableName = tableName
+        self.table = psycopg2.sql.Identifier(tableName)
         self.username = self._sanitise(username)
         self._connectToDb()
         pass
@@ -63,6 +73,71 @@ class MansiccaBackend:
         self.connection.set_session(autocommit=True)
         self.cursor = self.connection.cursor(
             cursor_factory=psycopg2.extras.DictCursor
+        )
+        self._createColumnsIfNeeded()
+
+    def _createColumnsIfNeeded(self):
+        self.cursor.execute(
+            psycopg2.sql.SQL(
+                """
+                    ALTER TABLE
+                        {table}
+                        ADD COLUMN IF NOT EXISTS
+                            sentiment sentiment[] DEFAULT {emptyArray}::sentiment[],
+                        ADD COLUMN IF NOT EXISTS
+                            ambiguous BOOLEAN[] DEFAULT {emptyArray}::BOOLEAN[],
+                        ADD COLUMN IF NOT EXISTS
+                            annotater TEXT[] DEFAULT {emptyArray}::TEXT[],
+                        ADD COLUMN IF NOT EXISTS
+                            token TEXT[] DEFAULT {emptyArray}::TEXT[],
+                        ADD COLUMN IF NOT EXISTS
+                            url TEXT DEFAULT '#';
+
+                    CREATE INDEX IF NOT EXISTS
+                            {table_id_idx}
+                        ON {table}
+                        USING
+                            btree(id);
+                    CREATE INDEX IF NOT EXISTS
+                            {table_sentiment_idx}
+                        ON {table}
+                        USING
+                            gin(sentiment);
+                    CREATE INDEX IF NOT EXISTS
+                            {table_ambiguous_idx}
+                        ON {table}
+                        USING
+                            gin(ambiguous);
+                    CREATE INDEX IF NOT EXISTS
+                            {table_annotater_idx}
+                        ON {table}
+                        USING
+                            gin(annotater);
+                    CREATE INDEX IF NOT EXISTS
+                            {table_token_idx}
+                        ON {table}
+                        USING
+                            gin(token);
+                """
+            ).format(
+                table=self.table,
+                table_id_idx=psycopg2.sql.Identifier(
+                    "{}_id_idx".format((self.tableName,))
+                ),
+                table_sentiment_idx=psycopg2.sql.Identifier(
+                    "{}_sentiment_idx".format((self.tableName,))
+                ),
+                table_ambiguous_idx=psycopg2.sql.Identifier(
+                    "{}_ambiguous_idx".format((self.tableName,))
+                ),
+                table_annotater_idx=psycopg2.sql.Identifier(
+                    "{}_annotater_idx".format((self.tableName,))
+                ),
+                table_token_idx=psycopg2.sql.Identifier(
+                    "{}_token_idx".format((self.tableName,))
+                ),
+                emptyArray=psycopg2.sql.Literal([])
+            )
         )
 
     def _generateToken(self):
