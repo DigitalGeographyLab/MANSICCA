@@ -142,5 +142,9 @@
             }
         });
 
+        /* focus user name input field
+         */
+        $("username input").focus();
+
     });
 }(jQuery));

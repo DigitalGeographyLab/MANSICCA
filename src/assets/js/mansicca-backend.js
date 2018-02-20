@@ -35,7 +35,8 @@
                 caption: "",
                 photo: false,
                 token: "",
-                url: ""
+                url: "",
+                stylesheet: "instagram"
             },
             options
         );
@@ -44,6 +45,7 @@
         this.photo = this._options.photo;
         this.token = this._options.token;
         this.url = this._options.url;
+        this.stylesheet = this._options.stylesheet;
 
         if(this.photo && this.photo.substring(0,4) != "http"){
             this.photo = path + "../data/" + this.photo[0] + "/" + this.photo;
@@ -84,6 +86,8 @@
     M.prototype._updateContainer = function(item) {
         item = item || this.items.current;
         this.container
+            .removeClass()
+            .addClass(item.stylesheet)
             .find("img")
                 .attr(
                     "src", 

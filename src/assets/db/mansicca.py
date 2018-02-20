@@ -28,19 +28,23 @@ __all__ = ["MansiccaBackend"]
 config = {
     "YKWsd6QW5sxSNInbwiMmmDhugwS6PpVJ": {
         "connectionString": "dbname=mansicca user=mansicca",
-        "tableName":        "instagram_southafrica_5000"
+        "tableName":        "instagram_southafrica_5000",
+        "stylesheet":       "instagram"
     },
     "9ju2G5FL30tiDd1ERqU35Du6uu9GKF7S": {
         "connectionString": "dbname=mansicca user=mansicca",
-        "tableName":        "instagram_sa_visitorhistory_1000"
+        "tableName":        "instagram_sa_visitorhistory_1000",
+        "stylesheet":       "instagram"
     },
     "PallasYllas": {
         "connectionString": "dbname=mansicca user=mansicca",
-        "tableName":        "py-instagram"
+        "tableName":        "py-instagram",
+        "stylesheet":       "instagram"
     },
     "Rhino1": {
         "connectionString": "dbname=mansicca user=mansicca",
-        "tableName":        "rhino1"
+        "tableName":        "rhino1",
+        "stylesheet":       "twitter"
     }
 }
 
@@ -48,7 +52,7 @@ config = {
 class MansiccaBackend:
     """ main class """
 
-    def __init__(self, connectionString, tableName, username):
+    def __init__(self, connectionString, tableName, username, stylesheet="instagram"):
         """
         MansiccaBackend
 
@@ -56,12 +60,14 @@ class MansiccaBackend:
             connectionString (str): PostgreSQL connection string
             tableName (str):        table with data to be annotated
             username (str):         username (to access level of agreement)
+            stylesheet (str):       which class to assign to <content> in the frontend
 
         """
         self.connectionString = connectionString
         self.tableName = tableName
         self.table = psycopg2.sql.Identifier(tableName)
         self.username = self._sanitise(username)
+        self.stylesheet = stylesheet
         self._connectToDb()
         pass
 
@@ -196,7 +202,8 @@ class MansiccaBackend:
                 "id": False,
                 "caption": "",
                 "photo": "",
-                "url": ""
+                "url": "",
+                "stylesheet": self.stylesheet
             }
         else:
             row = {
@@ -204,6 +211,7 @@ class MansiccaBackend:
                 "caption": row["caption"],
                 "photo": row["photo"],
                 "url": row["url"],
+                "stylesheet": self.stylesheet,
                 "token": self._generateToken()
             }
 
@@ -319,7 +327,8 @@ def main():
         m = MansiccaBackend(
             config[apiKey]["connectionString"],
             config[apiKey]["tableName"],
-            username
+            username,
+            config[apiKey]["stylesheet"]
         )
 
         if action == "get":
