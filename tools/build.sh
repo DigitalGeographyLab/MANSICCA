@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+server_test="christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
+server_production="christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
+
 baseDir="$(realpath "$(dirname "${0}")/..")"
 cd "${baseDir}"
 
@@ -74,23 +77,22 @@ if $uploadToTestServer; then
         --exclude '***.swp' \
         --exclude 'assets/data/***' \
         build/ \
-        christoph@christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/
+        "${server_test}"
 fi;
 
 
 # -- 5) upload to production server
 if $uploadToProductionServer; then
-    echo "no production server defined"
-#    read -r -p "upload to PRODUCTION? [y/N] " response
-#    response=${response,,}    # tolower
-#    if [[ "$response" =~ ^(yes|y)$ ]]; then
-#        rsync -avzH --progress --delete --partial \
-#            --exclude '***/.keep' \
-#            --exclude '***/.DS_Store' \
-#            --exclude '***.swp' \
-#            build/ \
-#            porem@upload.univie.ac.at:/u/www/porem/maps/
-#    fi
+    read -r -p "upload to PRODUCTION? [y/N] " response
+    response=${response,,}    # tolower
+    if [[ "$response" =~ ^(yes|y)$ ]]; then
+        rsync -avzH --progress --delete --partial \
+            --exclude '***/.keep' \
+            --exclude '***/.DS_Store' \
+            --exclude '***.swp' \
+            build/ \
+            "${server_production}"
+    fi
 fi
 
 
