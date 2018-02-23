@@ -39,7 +39,7 @@ config = {
     "PallasYllas": {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "py-instagram",
-        "stylesheet":       "instagram"
+        "stylesheet":       "imageonly"
     },
     "Rhino1": {
         "connectionString": "dbname=mansicca user=mansicca",

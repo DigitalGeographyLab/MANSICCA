@@ -72,6 +72,7 @@ cd "${baseDir}"
 # -- 4) upload to test server
 if $uploadToTestServer; then
     rsync -avzH --progress --delete --partial \
+        --rsh="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -l henkka" \
         --exclude '***/.keep' \
         --exclude '***/.DS_Store' \
         --exclude '***.swp' \
