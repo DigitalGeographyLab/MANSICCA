@@ -45,7 +45,7 @@ config = {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "rhino1",
         "stylesheet":       "twitter"
-    }
+    },
     "HelSentiment": {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "instagram_hma_fin_sentiment",
