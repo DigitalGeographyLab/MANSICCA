@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-server_test="christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
-server_production="christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
+server_test="henkka@christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
+server_production="henkka@christophfink.com:/var/www/mansicca.christophfink.com/htdocs-secure/"
 
 baseDir="$(realpath "$(dirname "${0}")/..")"
 cd "${baseDir}"
@@ -72,7 +72,7 @@ cd "${baseDir}"
 # -- 4) upload to test server
 if $uploadToTestServer; then
     rsync -avzH --progress --delete --partial \
-        --rsh="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -l henkka" \
+        --rsh="ssh" \
         --exclude '***/.keep' \
         --exclude '***/.DS_Store' \
         --exclude '***.swp' \

@@ -1,6 +1,6 @@
 # MANual SentIment ClassifiCAtion 
 
-Mansicca is a web frontend, written in Python and relying a PostgreSQL/PostGIS backend, to facilitate an efficient manual sentiment classification.
+Mansicca is a web frontend, written in Python and relying on a PostgreSQL/PostGIS backend, to facilitate an efficient manual sentiment classification.
 
 ## Python module dependencies
 - psycopg2

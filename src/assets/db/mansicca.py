@@ -50,6 +50,11 @@ config = {
         "connectionString": "dbname=mansicca user=mansicca",
         "tableName":        "instagram_hma_fin_sentiment",
         "stylesheet":       "instagram"
+    },
+    "rhino_r2": {
+        "connectionString": "dbname=mansicca user=mansicca",
+        "tableName":        "rhino_r2",
+        "stylesheet":       "twitter"
     }
 }
 

@@ -89,6 +89,7 @@
             .removeClass()
             .addClass(item.stylesheet)
             .find("img")
+                .removeAttr("src")
                 .attr(
                     "src", 
                     item.photo
