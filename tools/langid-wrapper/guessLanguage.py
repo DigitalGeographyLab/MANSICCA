@@ -91,6 +91,8 @@ def dataSaver(connectionString, table, outQueue):
                 if counter % 100 == 0:
                     connection.commit()
 
+            connection.commit()
+
 
 def main():
     connectionString = "dbname=mansicca"
