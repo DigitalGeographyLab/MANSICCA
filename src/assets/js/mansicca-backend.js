@@ -109,9 +109,14 @@
             }, 
             function(data){
                 if(data.status == "fetched-item") {
-                    this.items.previous = this.items.current;
-                    this.items.current = this.items.next;
-                    this.items.next = new M.Item(data.item);
+                    delete this.items.previous
+                    this.items.previous = this.items.current
+
+                    delete this.items.current
+                    this.items.current = this.items.next
+
+                    delete this.items.next
+                    this.items.next = new M.Item(data.item)
 
                     this._updateContainer.bind(this)(); 
                 } else {
@@ -144,6 +149,7 @@
                     token: this.items.previous.token
                 },
                 function(data){
+                    console.log(data);
                     this.getNext();
                 }.bind(this)
             );
@@ -151,8 +157,15 @@
     };
     
     M.prototype.getPrevious = function(){
-        this.items.next = new M.Item(this.items.current._options);
-        this.items.current = new M.Item(this.items.previous._options);
+        delete this.items.next;
+        this.items.next = this.items.current;
+
+        delete this.items.current;
+        this.items.current = this.items.previous;
+
+        delete this.items.previous;
+        this.items.previous = new M.Item();
+
         this._updateContainer();
     };
     
