@@ -90,6 +90,8 @@ header {
    vertical-align: middle;
 
    /*transition: margin-left:*/
+
+   display: none;
 }
 
 header * {
@@ -131,8 +133,8 @@ controls {
     right: 0;
 
     width: 100vw;
-    height: 20vH;
-    /*min-height: 200px;*/
+    height: 10vH;
+    min-height: 140px;
     max-height: 200px;
 
     z-index: 100;
