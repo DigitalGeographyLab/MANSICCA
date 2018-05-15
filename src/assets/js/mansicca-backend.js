@@ -149,7 +149,6 @@
                     token: this.items.previous.token
                 },
                 function(data){
-                    console.log(data);
                     this.getNext();
                 }.bind(this)
             );
